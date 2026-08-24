@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-or-later
+[Desktop Entry]
+Name=Simple ScreenShot Editor
+Name[ja]=Simple ScreenShot エディタ
+Comment=Annotate and share recent screenshots
+Comment[ja]=スクリーンショットへ注釈を付けて共有します
+Exec=gjs -m @EXTENSION_DIR@/editor/main.js
+Icon=camera-photo-symbolic
+Terminal=false
+Type=Application
+Categories=Graphics;2DGraphics;
+Keywords=screenshot;snip;capture;annotation;
+StartupNotify=true

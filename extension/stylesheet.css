@@ -1,0 +1,88 @@
+/* SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-or-later */
+
+#simple-screenshot-overlay {
+  color: #ffffff;
+}
+
+.simple-screenshot-shade {
+  background-color: rgba(0, 0, 0, 0.48);
+}
+
+.simple-screenshot-selection {
+  border: 2px solid #60cdff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.75), 0 0 14px rgba(96, 205, 255, 0.55);
+}
+
+.simple-screenshot-toolbar {
+  margin-top: 26px;
+  padding: 7px;
+  spacing: 4px;
+  border-radius: 9px;
+  background-color: rgba(32, 32, 32, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.46);
+}
+
+.simple-screenshot-tool-button {
+  min-width: 86px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  color: #f7f7f7;
+}
+
+.simple-screenshot-tool-button:hover,
+.simple-screenshot-icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.simple-screenshot-tool-button:checked {
+  color: #ffffff;
+  background-color: #0067c0;
+}
+
+.simple-screenshot-tool-content {
+  spacing: 3px;
+}
+
+.simple-screenshot-tool-icon {
+  icon-size: 20px;
+}
+
+.simple-screenshot-tool-label {
+  font-size: 10px;
+}
+
+.simple-screenshot-icon-button {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.simple-screenshot-action-icon {
+  icon-size: 20px;
+}
+
+.simple-screenshot-divider {
+  width: 1px;
+  margin: 7px 3px;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.simple-screenshot-hint {
+  margin-bottom: 32px;
+  padding: 9px 15px;
+  border-radius: 18px;
+  color: #ffffff;
+  background-color: rgba(20, 20, 20, 0.84);
+  font-weight: 600;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.35);
+}
+
+.simple-screenshot-size-label {
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: rgba(20, 20, 20, 0.9);
+  color: #ffffff;
+  font-feature-settings: "tnum";
+}

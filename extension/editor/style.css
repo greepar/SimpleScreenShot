@@ -1,0 +1,65 @@
+/* SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-or-later */
+
+window {
+  background: #f3f3f3;
+  color: #202020;
+}
+
+.editor-header {
+  background: #f7f7f7;
+  color: #202020;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.history-sidebar {
+  padding: 10px;
+  background: #f7f7f7;
+  color: #202020;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.history-title {
+  padding: 5px 5px 12px;
+}
+
+.history-row picture {
+  border-radius: 6px;
+  background: #252525;
+}
+
+.canvas-scroll {
+  background: #1c1c1f;
+}
+
+.editor-toolbar {
+  margin: 0;
+  padding: 9px 14px;
+  background: #fafafa;
+  color: #202020;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.tool-button {
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 5px;
+}
+
+.tool-button:checked {
+  color: #ffffff;
+  background: #0067c0;
+}
+
+.editor-status {
+  padding: 6px 12px;
+  background: #fafafa;
+  color: #404040;
+}
+
+.editor-header button,
+.editor-toolbar button,
+.editor-toolbar dropdown,
+.history-sidebar row {
+  color: #202020;
+}

@@ -1,0 +1,9 @@
+{
+  "uuid": "simple-screenshot@local",
+  "name": "Simple ScreenShot",
+  "description": "A fast Windows-style snipping overlay with clipboard, history, and annotation tools.",
+  "shell-version": ["46"],
+  "settings-schema": "org.gnome.shell.extensions.simple-screenshot",
+  "url": "https://github.com/Aero123421/SimpleScreenShot",
+  "version": 1
+}

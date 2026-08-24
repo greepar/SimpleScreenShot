@@ -1,0 +1,6 @@
+dist/
+*.shell-extension.zip
+schemas/gschemas.compiled
+extension/schemas/gschemas.compiled
+*.png
+!docs/*.png

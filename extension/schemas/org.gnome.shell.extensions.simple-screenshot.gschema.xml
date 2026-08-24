@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-or-later -->
+<schemalist>
+  <schema id="org.gnome.shell.extensions.simple-screenshot" path="/org/gnome/shell/extensions/simple-screenshot/">
+    <key name="shortcut" type="as">
+      <default>['&lt;Super&gt;&lt;Shift&gt;s']</default>
+      <summary>Shortcut used to open the snipping overlay</summary>
+    </key>
+    <key name="default-mode" type="s">
+      <choices>
+        <choice value="region"/>
+        <choice value="window"/>
+        <choice value="screen"/>
+      </choices>
+      <default>'region'</default>
+      <summary>Initial capture mode</summary>
+    </key>
+    <key name="copy-to-clipboard" type="b">
+      <default>true</default>
+      <summary>Copy new captures to the clipboard</summary>
+    </key>
+    <key name="save-copies" type="b">
+      <default>true</default>
+      <summary>Keep unedited captures on disk</summary>
+    </key>
+    <key name="save-directory" type="s">
+      <default>''</default>
+      <summary>Capture directory, or empty to use Pictures/Screenshots</summary>
+    </key>
+    <key name="filename-pattern" type="s">
+      <default>'Screenshot {timestamp}'</default>
+      <summary>Filename pattern supporting date, time, and timestamp placeholders</summary>
+    </key>
+    <key name="include-pointer" type="b">
+      <default>false</default>
+      <summary>Include the pointer in captures</summary>
+    </key>
+    <key name="show-notification" type="b">
+      <default>true</default>
+      <summary>Show a preview notification after capture</summary>
+    </key>
+    <key name="auto-open-editor" type="b">
+      <default>false</default>
+      <summary>Open the annotation editor immediately after capture</summary>
+    </key>
+    <key name="show-indicator" type="b">
+      <default>true</default>
+      <summary>Show the camera button in the top panel</summary>
+    </key>
+    <key name="history-limit" type="i">
+      <range min="1" max="200"/>
+      <default>30</default>
+      <summary>Maximum number of captures shown in history</summary>
+    </key>
+  </schema>
+</schemalist>
