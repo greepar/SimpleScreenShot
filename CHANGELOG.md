@@ -2,6 +2,14 @@
 
 All notable changes to Simple ScreenShot are documented here.
 
+## [0.1.1] - 2026-08-26
+
+### Changed
+
+- Replaced raw accelerator text editing with an easy press-to-record shortcut dialog.
+- Added clear, cancel, and one-click reset actions for the keyboard shortcut.
+- Set the default capture shortcut explicitly to `Shift + Super + S`.
+
 ## [0.1.0] - 2026-08-24
 
 Initial public release.

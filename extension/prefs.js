@@ -1,10 +1,183 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-or-later
 
 import Adw from 'gi://Adw';
+import Gdk from 'gi://Gdk?version=4.0';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk?version=4.0';
 
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+const DEFAULT_SHORTCUT = '<Shift><Super>s';
+
+const MODIFIER_KEYS = new Set([
+    Gdk.KEY_Shift_L,
+    Gdk.KEY_Shift_R,
+    Gdk.KEY_Control_L,
+    Gdk.KEY_Control_R,
+    Gdk.KEY_Alt_L,
+    Gdk.KEY_Alt_R,
+    Gdk.KEY_Super_L,
+    Gdk.KEY_Super_R,
+    Gdk.KEY_Meta_L,
+    Gdk.KEY_Meta_R,
+    Gdk.KEY_Hyper_L,
+    Gdk.KEY_Hyper_R,
+    Gdk.KEY_ISO_Level3_Shift,
+    Gdk.KEY_ISO_Level5_Shift,
+]);
+
+function isValidGlobalShortcut(keyval, keycode, modifiers) {
+    if (!Gtk.accelerator_valid(keyval, modifiers))
+        return false;
+
+    const strongModifiers = Gdk.ModifierType.CONTROL_MASK |
+        Gdk.ModifierType.ALT_MASK |
+        Gdk.ModifierType.SUPER_MASK |
+        Gdk.ModifierType.META_MASK |
+        Gdk.ModifierType.HYPER_MASK;
+    const worksOnItsOwn = keyval === Gdk.KEY_Print ||
+        (keyval >= Gdk.KEY_F1 && keyval <= Gdk.KEY_F35);
+
+    // Global shortcuts without Ctrl, Alt, or Super interfere with normal use.
+    return keycode === 0 || worksOnItsOwn || (modifiers & strongModifiers) !== 0;
+}
+
+function showShortcutRecorder(window, settings) {
+    const dialog = new Adw.Window({
+        title: 'Set keyboard shortcut',
+        transient_for: window,
+        modal: true,
+        default_width: 500,
+        default_height: 380,
+    });
+
+    const root = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+    dialog.content = root;
+    root.append(new Adw.HeaderBar());
+
+    const content = new Gtk.Box({
+        orientation: Gtk.Orientation.VERTICAL,
+        spacing: 18,
+        vexpand: true,
+        valign: Gtk.Align.CENTER,
+    });
+    content.orientation = Gtk.Orientation.VERTICAL;
+    content.margin_top = 24;
+    content.margin_bottom = 24;
+    content.margin_start = 36;
+    content.margin_end = 36;
+    root.append(content);
+
+    const icon = new Gtk.Image({
+        icon_name: 'input-keyboard-symbolic',
+        pixel_size: 48,
+    });
+    icon.add_css_class('accent');
+    content.append(icon);
+
+    const heading = new Gtk.Label({
+        label: 'Press the new shortcut now',
+        justify: Gtk.Justification.CENTER,
+    });
+    heading.add_css_class('title-2');
+    content.append(heading);
+
+    const preview = new Gtk.ShortcutLabel({
+        accelerator: '',
+        disabled_text: 'Waiting for keys…',
+        halign: Gtk.Align.CENTER,
+    });
+    content.append(preview);
+
+    const hint = new Gtk.Label({
+        label: 'Hold one or more modifier keys, then press another key.\nFor example: Shift + Super + S',
+        justify: Gtk.Justification.CENTER,
+        wrap: true,
+    });
+    hint.add_css_class('dim-label');
+    content.append(hint);
+
+    const saveShortcut = accelerator => {
+        settings.set_strv('shortcut', accelerator ? [accelerator] : []);
+        const message = accelerator
+            ? `Shortcut set to ${shortcutDisplayName(accelerator)}`
+            : 'Keyboard shortcut cleared';
+        window.add_toast(new Adw.Toast({title: message, timeout: 3}));
+    };
+
+    const actions = new Gtk.Box({
+        orientation: Gtk.Orientation.HORIZONTAL,
+        spacing: 12,
+        homogeneous: true,
+    });
+    const cancel = new Gtk.Button({label: 'Cancel'});
+    cancel.connect('clicked', () => dialog.close());
+    actions.append(cancel);
+
+    const clear = new Gtk.Button({label: 'Clear'});
+    clear.connect('clicked', () => {
+        saveShortcut('');
+        dialog.close();
+    });
+    actions.append(clear);
+
+    const useDefault = new Gtk.Button({
+        label: 'Use default',
+        tooltip_text: 'Shift + Super + S',
+        css_classes: ['suggested-action'],
+    });
+    useDefault.connect('clicked', () => {
+        saveShortcut(DEFAULT_SHORTCUT);
+        dialog.close();
+    });
+    actions.append(useDefault);
+    content.append(actions);
+
+    const keys = Gtk.EventControllerKey.new();
+    keys.propagation_phase = Gtk.PropagationPhase.CAPTURE;
+    keys.connect('key-pressed', (_controller, pressedKeyval, keycode, state) => {
+        if (pressedKeyval === Gdk.KEY_Escape) {
+            dialog.close();
+            return Gdk.EVENT_STOP;
+        }
+
+        if (MODIFIER_KEYS.has(pressedKeyval)) {
+            preview.disabled_text = 'Keep holding, then press another key…';
+            return Gdk.EVENT_STOP;
+        }
+
+        let keyval = pressedKeyval;
+        if (keyval === Gdk.KEY_ISO_Left_Tab)
+            keyval = Gdk.KEY_Tab;
+        keyval = Gdk.keyval_to_lower(keyval);
+
+        let modifiers = state & Gtk.accelerator_get_default_mod_mask();
+        modifiers &= ~Gdk.ModifierType.LOCK_MASK;
+
+        if (!isValidGlobalShortcut(keyval, keycode, modifiers)) {
+            preview.accelerator = '';
+            preview.disabled_text = 'Add Ctrl, Alt, or Super';
+            hint.label = 'That key would interfere with normal typing.\nTry a combination such as Shift + Super + S.';
+            return Gdk.EVENT_STOP;
+        }
+
+        const accelerator = Gtk.accelerator_name(keyval, modifiers);
+        preview.accelerator = accelerator;
+        saveShortcut(accelerator);
+        dialog.destroy();
+        return Gdk.EVENT_STOP;
+    });
+    dialog.add_controller(keys);
+    dialog.present();
+}
+
+function shortcutDisplayName(accelerator) {
+    if (!accelerator)
+        return 'Not set';
+
+    const [success, keyval, modifiers] = Gtk.accelerator_parse(accelerator);
+    return success ? Gtk.accelerator_get_label(keyval, modifiers) : 'Not set';
+}
 
 function addSwitch(group, settings, key, title, subtitle) {
     const row = new Adw.SwitchRow({title, subtitle});
@@ -43,21 +216,33 @@ export default class SimpleScreenshotPreferences extends ExtensionPreferences {
         const capture = new Adw.PreferencesGroup({title: 'Capture controls'});
         general.add(capture);
 
-        const shortcut = new Adw.EntryRow({
+        const shortcut = new Adw.ActionRow({
             title: 'Keyboard shortcut',
-            text: settings.get_strv('shortcut')[0] ?? '',
+            subtitle: 'Opens the snipping overlay from anywhere',
         });
-        shortcut.add_suffix(new Gtk.Image({icon_name: 'input-keyboard-symbolic'}));
-        shortcut.connect('apply', () => {
-            const value = shortcut.text.trim();
-            settings.set_strv('shortcut', value ? [value] : []);
+        const shortcutLabel = new Gtk.ShortcutLabel({
+            accelerator: settings.get_strv('shortcut')[0] ?? '',
+            disabled_text: 'Not set',
+            valign: Gtk.Align.CENTER,
         });
-        shortcut.connect('notify::text', () => {
-            const value = shortcut.text.trim();
-            if (value)
-                settings.set_strv('shortcut', [value]);
+        const changeShortcut = new Gtk.Button({
+            label: 'Change…',
+            valign: Gtk.Align.CENTER,
         });
+        changeShortcut.connect('clicked', () =>
+            showShortcutRecorder(window, settings));
+        shortcut.add_suffix(shortcutLabel);
+        shortcut.add_suffix(changeShortcut);
+        shortcut.activatable_widget = changeShortcut;
         capture.add(shortcut);
+
+        const shortcutChangedId = settings.connect('changed::shortcut', () => {
+            shortcutLabel.accelerator = settings.get_strv('shortcut')[0] ?? '';
+        });
+        window.connect('close-request', () => {
+            settings.disconnect(shortcutChangedId);
+            return false;
+        });
 
         const modeModel = Gtk.StringList.new([
             'Rectangular snip', 'Window snip', 'Full-screen snip',

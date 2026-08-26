@@ -8,7 +8,7 @@ Ubuntu/GNOME向けの、Windows 11の切り取りツールに近い操作感を�
 
 A Windows-style snipping overlay and annotation editor for Ubuntu 24.04 / GNOME Shell 46.
 
-`Super + Shift + S`を押すと画面が静止し、上部に切り取りツールバーが表示されます。撮影した画像はクリップボードへコピーされ、プレビュー通知から注釈エディタを開けます。
+`Shift + Super + S`を押すと画面が静止し、上部に切り取りツールバーが表示されます。撮影した画像はクリップボードへコピーされ、プレビュー通知から注釈エディタを開けます。
 
 ## 機能
 
@@ -21,7 +21,7 @@ A Windows-style snipping overlay and annotation editor for Ubuntu 24.04 / GNOME 
 - 非破壊クロップとUndo/Redo
 - コピー、上書き保存、別名保存
 - 最近の撮影履歴
-- 保存先、ファイル名、ショートカット、マウスポインターなどの設定
+- 保存先、ファイル名、押すだけで登録できるショートカット、マウスポインターなどの設定
 - 日本語・英語UI
 
 ## 必要環境
@@ -47,18 +47,18 @@ curl -fsSL https://raw.githubusercontent.com/Aero123421/SimpleScreenShot/main/sc
 バージョンを固定することもできます。
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Aero123421/SimpleScreenShot/main/scripts/install-online.sh | SIMPLE_SCREENSHOT_VERSION=v0.1.0 sh
+curl -fsSL https://raw.githubusercontent.com/Aero123421/SimpleScreenShot/main/scripts/install-online.sh | SIMPLE_SCREENSHOT_VERSION=v0.1.1 sh
 ```
 
 新規インストール後は一度ログアウトしてログインしてください。X11では`Alt + F2`を押し、`r`を実行してGNOME Shellを再起動する方法もあります。
 
 インストール後は次の方法で起動できます。
 
-- `Super + Shift + S`
+- `Shift + Super + S`
 - トップパネルのカメラアイコン
 - アプリ一覧の「Simple ScreenShot Editor」
 
-設定画面はExtensionsアプリから「Simple ScreenShot」を選ぶか、トップパネルのカメラメニューから開きます。
+設定画面はExtensionsアプリから「Simple ScreenShot」を選ぶか、トップパネルのカメラメニューから開きます。ショートカットは内部形式を入力する必要はなく、「Change…」を押して使いたいキーを実際に押すだけで変更できます。
 
 ## 撮影オーバーレイ
 

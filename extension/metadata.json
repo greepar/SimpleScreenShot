@@ -5,5 +5,5 @@
   "shell-version": ["46"],
   "settings-schema": "org.gnome.shell.extensions.simple-screenshot",
   "url": "https://github.com/Aero123421/SimpleScreenShot",
-  "version": 1
+  "version": 2
 }

@@ -3,7 +3,7 @@
 <schemalist>
   <schema id="org.gnome.shell.extensions.simple-screenshot" path="/org/gnome/shell/extensions/simple-screenshot/">
     <key name="shortcut" type="as">
-      <default>['&lt;Super&gt;&lt;Shift&gt;s']</default>
+      <default>['&lt;Shift&gt;&lt;Super&gt;s']</default>
       <summary>Shortcut used to open the snipping overlay</summary>
     </key>
     <key name="default-mode" type="s">

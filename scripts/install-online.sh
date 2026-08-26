@@ -74,4 +74,4 @@ gnome-extensions enable "$uuid" 2>/dev/null || true
 gjs -c "const Gio=imports.gi.Gio; const s=new Gio.Settings({schema_id:'org.gnome.shell'}); const key='enabled-extensions'; const uuid='$uuid'; const enabled=s.get_strv(key); if (!enabled.includes(uuid)) { enabled.push(uuid); s.set_strv(key, enabled); }"
 
 printf '\n%s\n' 'Simple ScreenShot was installed successfully.'
-printf '%s\n' 'Use Super + Shift + S after logging out and back in once.'
+printf '%s\n' 'Use Shift + Super + S after logging out and back in once.'
