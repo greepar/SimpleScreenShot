@@ -14,6 +14,7 @@ for file in $(find extension -name '*.js' -type f | sort); do
 done
 
 node tests/geometry.test.mjs
+node tests/keybinding.test.mjs
 gjs -m extension/editor/main.js --self-test tests/fixture.svg "$test_output"
 
 mkdir -p dist

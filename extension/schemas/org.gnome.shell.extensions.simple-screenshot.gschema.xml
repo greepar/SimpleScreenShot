@@ -2,9 +2,13 @@
 <!-- SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-or-later -->
 <schemalist>
   <schema id="org.gnome.shell.extensions.simple-screenshot" path="/org/gnome/shell/extensions/simple-screenshot/">
-    <key name="shortcut" type="as">
+    <key name="simple-screenshot-open-overlay" type="as">
       <default>['&lt;Shift&gt;&lt;Super&gt;s']</default>
       <summary>Shortcut used to open the snipping overlay</summary>
+    </key>
+    <key name="shortcut" type="as">
+      <default>[]</default>
+      <summary>Legacy shortcut retained for settings migration</summary>
     </key>
     <key name="default-mode" type="s">
       <choices>

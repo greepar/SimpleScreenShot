@@ -8,6 +8,7 @@ import Gtk from 'gi://Gtk?version=4.0';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 const DEFAULT_SHORTCUT = '<Shift><Super>s';
+const SHORTCUT_KEY = 'simple-screenshot-open-overlay';
 
 const MODIFIER_KEYS = new Set([
     Gdk.KEY_Shift_L,
@@ -98,7 +99,7 @@ function showShortcutRecorder(window, settings) {
     content.append(hint);
 
     const saveShortcut = accelerator => {
-        settings.set_strv('shortcut', accelerator ? [accelerator] : []);
+        settings.set_strv(SHORTCUT_KEY, accelerator ? [accelerator] : []);
         const message = accelerator
             ? `Shortcut set to ${shortcutDisplayName(accelerator)}`
             : 'Keyboard shortcut cleared';
@@ -221,7 +222,7 @@ export default class SimpleScreenshotPreferences extends ExtensionPreferences {
             subtitle: 'Opens the snipping overlay from anywhere',
         });
         const shortcutLabel = new Gtk.ShortcutLabel({
-            accelerator: settings.get_strv('shortcut')[0] ?? '',
+            accelerator: settings.get_strv(SHORTCUT_KEY)[0] ?? '',
             disabled_text: 'Not set',
             valign: Gtk.Align.CENTER,
         });
@@ -236,8 +237,10 @@ export default class SimpleScreenshotPreferences extends ExtensionPreferences {
         shortcut.activatable_widget = changeShortcut;
         capture.add(shortcut);
 
-        const shortcutChangedId = settings.connect('changed::shortcut', () => {
-            shortcutLabel.accelerator = settings.get_strv('shortcut')[0] ?? '';
+        const shortcutChangedId = settings.connect(
+            `changed::${SHORTCUT_KEY}`, () => {
+                shortcutLabel.accelerator =
+                    settings.get_strv(SHORTCUT_KEY)[0] ?? '';
         });
         window.connect('close-request', () => {
             settings.disconnect(shortcutChangedId);

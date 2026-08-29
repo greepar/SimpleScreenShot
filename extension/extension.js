@@ -13,7 +13,8 @@ import {CaptureIndicator} from './indicator.js';
 import {SnippingOverlay} from './overlay.js';
 import {t} from './i18n.js';
 
-const SHORTCUT_KEY = 'shortcut';
+const SHORTCUT_KEY = 'simple-screenshot-open-overlay';
+const LEGACY_SHORTCUT_KEY = 'shortcut';
 
 export default class SimpleScreenshotExtension extends Extension {
     enable() {
@@ -22,6 +23,8 @@ export default class SimpleScreenshotExtension extends Extension {
         this._overlay = null;
         this._openingOverlay = false;
         this._indicator = null;
+
+        this._migrateLegacyShortcut();
 
         Main.wm.addKeybinding(
             SHORTCUT_KEY,
@@ -48,6 +51,18 @@ export default class SimpleScreenshotExtension extends Extension {
         this._indicatorSignal = 0;
         this._captureService = null;
         this._settings = null;
+    }
+
+    _migrateLegacyShortcut() {
+        if (this._settings.get_user_value(SHORTCUT_KEY) !== null)
+            return;
+
+        if (this._settings.get_user_value(LEGACY_SHORTCUT_KEY) !== null) {
+            this._settings.set_strv(
+                SHORTCUT_KEY,
+                this._settings.get_strv(LEGACY_SHORTCUT_KEY)
+            );
+        }
     }
 
     async openOverlay(mode = null) {

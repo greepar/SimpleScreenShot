@@ -2,6 +2,13 @@
 
 All notable changes to Simple ScreenShot are documented here.
 
+## [0.1.2] - 2026-08-29
+
+### Fixed
+
+- Fixed the capture shortcut being overwritten by Ubuntu Dock because both extensions used the same internal keybinding name.
+- Automatically migrate shortcuts saved by versions 0.1.0 and 0.1.1.
+
 ## [0.1.1] - 2026-08-26
 
 ### Changed

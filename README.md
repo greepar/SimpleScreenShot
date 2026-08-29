@@ -47,7 +47,7 @@ curl -fsSL https://raw.githubusercontent.com/Aero123421/SimpleScreenShot/main/sc
 バージョンを固定することもできます。
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Aero123421/SimpleScreenShot/main/scripts/install-online.sh | SIMPLE_SCREENSHOT_VERSION=v0.1.1 sh
+curl -fsSL https://raw.githubusercontent.com/Aero123421/SimpleScreenShot/main/scripts/install-online.sh | SIMPLE_SCREENSHOT_VERSION=v0.1.2 sh
 ```
 
 新規インストール後は一度ログアウトしてログインしてください。X11では`Alt + F2`を押し、`r`を実行してGNOME Shellを再起動する方法もあります。
