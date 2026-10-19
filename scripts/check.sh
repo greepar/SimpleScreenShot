@@ -15,10 +15,12 @@ done
 
 node tests/geometry.test.mjs
 node tests/keybinding.test.mjs
+gjs -m tests/annotations.test.js
 gjs -m extension/editor/main.js --self-test tests/fixture.svg "$test_output"
 
 mkdir -p dist
 gnome-extensions pack --force --out-dir dist \
+    --extra-source=annotations.js \
     --extra-source=capture.js \
     --extra-source=geometry.js \
     --extra-source=i18n.js \

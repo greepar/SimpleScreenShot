@@ -5,12 +5,12 @@
 }
 
 .simple-screenshot-shade {
-  background-color: rgba(0, 0, 0, 0.48);
+  background-color: rgba(0, 0, 0, 0.40);
 }
 
 .simple-screenshot-selection {
   border: 2px solid #60cdff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.75), 0 0 14px rgba(96, 205, 255, 0.55);
+
 }
 
 .simple-screenshot-toolbar {
@@ -86,3 +86,28 @@
   color: #ffffff;
   font-feature-settings: "tnum";
 }
+
+.qq-screenshot-actions {
+  padding: 4px;
+  spacing: 4px;
+  border-radius: 4px;
+  background-color: #242424;
+  border: 1px solid #454545;
+}
+.qq-screenshot-action-row { spacing: 2px; }
+.qq-screenshot-action {
+  width: 38px;
+  height: 34px;
+  border-radius: 3px;
+  color: #c8c8c8;
+  font-size: 25px;
+  text-align: center;
+}
+.qq-screenshot-action:hover { background-color: #424242; }
+.qq-screenshot-action:checked { background-color: #0067a8; color: #ffffff; }
+.qq-screenshot-cancel, .qq-screenshot-done { color: #00aaff; }
+.qq-screenshot-handle { background-color: #ffffff; border: 1px solid #009fff; }
+.qq-screenshot-palette { spacing: 8px; padding: 6px; }
+.qq-screenshot-color { width: 19px; height: 19px; border: 2px solid #666666; border-radius: 12px; }
+.qq-screenshot-width { color: #dddddd; width: 23px; border-radius: 3px; background-color: #444444; }
+.qq-screenshot-text { font-size: 20px; padding: 4px 7px; background-color: rgba(255,255,255,0.96); border: 1px solid #009fff; border-radius: 2px; }

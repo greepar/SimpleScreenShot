@@ -11,6 +11,7 @@ applications_dir="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
 
 mkdir -p "$build_dir" "$applications_dir"
 gnome-extensions pack --force --out-dir "$build_dir" \
+    --extra-source=annotations.js \
     --extra-source=capture.js \
     --extra-source=geometry.js \
     --extra-source=i18n.js \

@@ -11,6 +11,7 @@ check:
 pack:
 	mkdir -p dist
 	gnome-extensions pack --force --out-dir dist \
+		--extra-source=annotations.js \
 		--extra-source=capture.js \
 		--extra-source=geometry.js \
 		--extra-source=i18n.js \

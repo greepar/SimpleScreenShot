@@ -3,7 +3,7 @@
 <schemalist>
   <schema id="org.gnome.shell.extensions.simple-screenshot" path="/org/gnome/shell/extensions/simple-screenshot/">
     <key name="simple-screenshot-open-overlay" type="as">
-      <default>['&lt;Shift&gt;&lt;Super&gt;s']</default>
+      <default>['&lt;Control&gt;&lt;Alt&gt;a']</default>
       <summary>Shortcut used to open the snipping overlay</summary>
     </key>
     <key name="shortcut" type="as">
@@ -16,7 +16,7 @@
         <choice value="window"/>
         <choice value="screen"/>
       </choices>
-      <default>'region'</default>
+      <default>'window'</default>
       <summary>Initial capture mode</summary>
     </key>
     <key name="copy-to-clipboard" type="b">
@@ -24,7 +24,7 @@
       <summary>Copy new captures to the clipboard</summary>
     </key>
     <key name="save-copies" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Keep unedited captures on disk</summary>
     </key>
     <key name="save-directory" type="s">
@@ -40,7 +40,7 @@
       <summary>Include the pointer in captures</summary>
     </key>
     <key name="show-notification" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Show a preview notification after capture</summary>
     </key>
     <key name="auto-open-editor" type="b">

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-or-later
 
+import Cairo from 'cairo';
 import Cogl from 'gi://Cogl';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
@@ -8,6 +9,7 @@ import Shell from 'gi://Shell';
 import St from 'gi://St';
 
 import {sanitizeFilename} from './geometry.js';
+import {drawAnnotation} from './annotations.js';
 
 Gio._promisify(Shell.Screenshot.prototype, 'screenshot_stage_to_content');
 Gio._promisify(Shell.Screenshot, 'composite_to_stream');
@@ -86,7 +88,15 @@ export class CaptureService {
         const [content, scale, cursorContent, cursorPoint, cursorScale] =
             await shooter.screenshot_stage_to_content();
 
+        const previewStream = Gio.MemoryOutputStream.new_resizable();
+        const texture = content.get_texture();
+        const pixels = await Shell.Screenshot.composite_to_stream(
+            texture, 0, 0, texture.get_width(), texture.get_height(),
+            scale, null, 0, 0, 1, previewStream);
+        previewStream.close(null);
+
         return {
+            pixels,
             content,
             texture: content.get_texture(),
             scale,
@@ -96,7 +106,7 @@ export class CaptureService {
         };
     }
 
-    async capture(snapshot, geometry) {
+    async capture(snapshot, geometry, annotations = [], saveToDisk = false) {
         const scale = snapshot.scale;
         const stream = Gio.MemoryOutputStream.new_resizable();
         const includePointer = this._settings.get_boolean('include-pointer');
@@ -110,7 +120,7 @@ export class CaptureService {
             geometry.height * scale,
         ].map(value => Math.round(value));
 
-        const pixbuf = await Shell.Screenshot.composite_to_stream(
+        let pixbuf = await Shell.Screenshot.composite_to_stream(
             snapshot.texture,
             ...scaled,
             scale,
@@ -121,24 +131,41 @@ export class CaptureService {
             stream
         );
         stream.close(null);
-        const bytes = stream.steal_as_bytes();
+        let bytes = stream.steal_as_bytes();
 
-        global.display.get_sound_player().play_from_theme(
-            'screen-capture', 'Screenshot taken', null);
+        // Keep capture silent; do not change the desktop's sound settings.
 
+        const file = this._writeCapture(bytes, saveToDisk);
+        if (annotations.length) {
+            const surface = Cairo.ImageSurface.createFromPNG(file.get_path());
+            const cr = new Cairo.Context(surface);
+            cr.scale(scale, scale);
+            cr.translate(-geometry.x, -geometry.y);
+            cr.rectangle(geometry.x, geometry.y, geometry.width, geometry.height);
+            cr.clip();
+            for (const annotation of annotations)
+                drawAnnotation(cr, annotation, snapshot.pixels, {scale});
+            surface.writeToPNG(file.get_path());
+            cr.$dispose();
+            surface.finish();
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(file.get_path());
+            const [ok, contents] = file.load_contents(null);
+            if (!ok)
+                throw new Error('Unable to read annotated screenshot');
+            bytes = new GLib.Bytes(contents);
+        }
         if (this._settings.get_boolean('copy-to-clipboard')) {
             St.Clipboard.get_default().set_content(
                 St.ClipboardType.CLIPBOARD, 'image/png', bytes);
         }
 
-        const file = this._writeCapture(bytes);
         this._appendHistory(file, geometry);
 
         return {file, pixbuf, bytes};
     }
 
-    _writeCapture(bytes) {
-        const keepCopy = this._settings.get_boolean('save-copies');
+    _writeCapture(bytes, saveToDisk = false) {
+        const keepCopy = saveToDisk || this._settings.get_boolean('save-copies');
         let directoryPath;
 
         if (keepCopy) {

@@ -77,7 +77,7 @@ export default class SimpleScreenshotExtension extends Extension {
 
             this._overlay = new SnippingOverlay({
                 initialMode: mode ?? this._settings.get_string('default-mode'),
-                onCapture: (prepared, rect) => this._capture(prepared, rect),
+                onCapture: (prepared, rect, annotations, save) => this._capture(prepared, rect, annotations, save),
                 onCancel: () => {
                     this._overlay = null;
                 },
@@ -96,10 +96,10 @@ export default class SimpleScreenshotExtension extends Extension {
         }
     }
 
-    async _capture(snapshot, rect) {
+    async _capture(snapshot, rect, annotations = [], save = false) {
         this._overlay = null;
         try {
-            const result = await this._captureService.capture(snapshot, rect);
+            const result = await this._captureService.capture(snapshot, rect, annotations, save);
             if (!this._settings)
                 return;
 

@@ -25,8 +25,8 @@ assert.ok(
 );
 assert.match(
     schemaSource,
-    /<key name="simple-screenshot-open-overlay" type="as">[\s\S]*?<default>\['&lt;Shift&gt;&lt;Super&gt;s']<\/default>/,
-    'Shift + Super + S must remain the default shortcut'
+    /<key name="simple-screenshot-open-overlay" type="as">[\s\S]*?<default>\['&lt;Control&gt;&lt;Alt&gt;a']<\/default>/,
+    'Ctrl + Alt + A is the requested shortcut'
 );
 
 console.log('keybinding tests passed');

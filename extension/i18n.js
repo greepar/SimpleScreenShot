@@ -4,6 +4,29 @@ import GLib from 'gi://GLib';
 
 const japanese = GLib.get_language_names().some(name => name.startsWith('ja'));
 
+const chinese = true;
+const zh = {
+    "region": "手动选区",
+    "window": "智能框选",
+    "screen": "整个屏幕",
+    "regionHint": "拖动选择区域 · W 智能框选 · Esc / 右键取消",
+    "windowHint": "移动鼠标自动框选 · 单击截取窗口 · 拖动自选区域 · Esc / 右键取消",
+    "screenHint": "单击截取屏幕 · Esc / 右键取消",
+    "cancel": "取消",
+    "settings": "设置",
+    "copied": "已复制到剪贴板",
+    "captured": "截图完成",
+    "notificationBody": "点击预览进行标注",
+    "edit": "标注",
+    "showFiles": "打开文件夹",
+    "area": "手动选择区域",
+    "captureWindow": "智能框选窗口",
+    "captureScreen": "截取整个屏幕",
+    "openEditor": "打开标注工具",
+    "history": "最近截图",
+    "openFailed": "无法打开标注工具"
+};
+
 const strings = {
     region: ['Rectangular snip', '四角形の領域切り取り'],
     window: ['Window snip', 'ウィンドウの切り取り'],
@@ -27,6 +50,8 @@ const strings = {
 };
 
 export function t(key) {
+    if (chinese && zh[key])
+        return zh[key];
     const value = strings[key] ?? [key, key];
     return value[japanese ? 1 : 0];
 }
