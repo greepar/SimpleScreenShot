@@ -403,6 +403,8 @@ class SnippingOverlay extends St.Widget {
 
         const [top, bottom, left, right] = this._shades;
         top.set_position(0, 0);
+        // Setting the initial (0, 0) position can be a no-op; prevent BinLayout centering.
+        top.fixed_position_set = true;
         top.set_size(this.width, rect.y);
         bottom.set_position(0, rect.y + rect.height);
         bottom.set_size(this.width, Math.max(0, this.height - rect.y - rect.height));

@@ -2,6 +2,12 @@
 
 All notable changes to Simple ScreenShot are documented here.
 
+## [Unreleased]
+
+### Fixed
+
+- Keep the top selection shade anchored to the screen origin instead of appearing as a dark horizontal band across the selected area.
+
 ## [0.1.2] - 2026-08-29
 
 ### Fixed
