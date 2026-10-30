@@ -12,3 +12,16 @@ Run on GNOME Shell 46 after loading the changed extension.
 
 Before the fix, a newly created top shade could remain without a fixed position
 when positioned at its initial `(0, 0)`, allowing BinLayout to center it vertically.
+
+## Pointer and popup capture
+
+1. Put the pointer over the intended capture area and open the overlay by shortcut.
+2. Toggle the toolbar's pointer switch on and off. The preview should show or hide
+   the pointer at its original location, without following the selection cursor.
+3. Capture with the switch on, then off, and compare the exported images.
+4. Reopen the overlay and preferences; both should retain the last switch value.
+5. Press Super to open the Zorin start menu, then use the capture shortcut.
+   The frozen screenshot should contain the expanded menu, while the live menu
+   closes so the selection overlay can receive clicks and Escape.
+6. Repeat with a panel popup and GNOME overview, then cancel the capture and
+   confirm normal keyboard and pointer interaction resumes.

@@ -41,6 +41,8 @@ class SnippingOverlay extends St.Widget {
         this._onCapture = params.onCapture;
         this._onCancel = params.onCancel;
         this._onSettings = params.onSettings;
+        this._includePointer = params.includePointer ?? false;
+        this._onPointerChanged = params.onPointerChanged;
         this._mode = MODES.includes(params.initialMode)
             ? params.initialMode
             : 'region';
@@ -62,6 +64,10 @@ class SnippingOverlay extends St.Widget {
 
         this._background = new St.Widget({x_expand: true, y_expand: true});
         this.add_child(this._background);
+
+        // Preview the pointer frozen when capture starts, not the selection cursor.
+        this._cursor = new St.Widget({reactive: false, visible: false});
+        this.add_child(this._cursor);
 
         this._fullShade = new St.Widget({
             style_class: 'simple-screenshot-shade',
@@ -165,6 +171,24 @@ class SnippingOverlay extends St.Widget {
         }
 
         box.add_child(new St.Widget({style_class: 'simple-screenshot-divider'}));
+        this._pointerLabel = new St.Label({
+            style_class: 'simple-screenshot-tool-label',
+        });
+        this._pointerButton = new St.Button({
+            style_class: 'simple-screenshot-tool-button',
+            child: this._pointerLabel,
+            can_focus: true,
+            toggle_mode: true,
+            checked: this._includePointer,
+            accessible_name: t('includePointer'),
+        });
+        this._pointerButton.connect('notify::checked', () => {
+            this._includePointer = this._pointerButton.checked;
+            this._syncPointer();
+            this._onPointerChanged?.(this._includePointer);
+        });
+        this._syncPointer();
+        box.add_child(this._pointerButton);
         box.add_child(this._iconButton(
             'preferences-system-symbolic', t('settings'), () => {
                 const callback = this._onSettings;
@@ -190,9 +214,24 @@ class SnippingOverlay extends St.Widget {
         return button;
     }
 
+    _syncPointer() {
+        this._pointerLabel.text = t(this._includePointer ? 'pointerOn' : 'pointerOff');
+        this._cursor.visible = this._includePointer && !!this._snapshot?.cursorContent;
+    }
+
     open(snapshot) {
         this._snapshot = snapshot;
         this._background.set_content(snapshot.content);
+        if (snapshot.cursorContent) {
+            this._cursor.set_content(snapshot.cursorContent);
+            this._cursor.set_position(snapshot.cursorPoint.x, snapshot.cursorPoint.y);
+            this._cursor.fixed_position_set = true;
+            const [, width, height] = snapshot.cursorContent.get_preferred_size();
+            this._cursor.set_size(width * snapshot.cursorScale, height * snapshot.cursorScale);
+        }
+        this._syncPointer();
+        // Keep menus in the frozen image, then release their grabs before ours.
+        Main.layoutManager.emit('system-modal-opened');
         Main.layoutManager.addTopChrome(this, {trackFullscreen: true});
         this.set_position(0, 0);
         this.set_size(global.stage.width, global.stage.height);

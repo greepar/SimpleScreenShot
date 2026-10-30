@@ -210,7 +210,7 @@ export default class SimpleScreenshotPreferences extends ExtensionPreferences {
         addSwitch(behavior, settings, 'auto-open-editor',
             'Open editor after capture', 'Skip the notification-only workflow');
         addSwitch(behavior, settings, 'include-pointer',
-            'Include mouse pointer', 'Draw the current pointer into the image');
+            '包含鼠标指针', '截入启动截图时的指针，也可在截图工具栏中切换');
         addSwitch(behavior, settings, 'show-indicator',
             'Show top-panel button', 'Keep capture commands in the system panel');
 

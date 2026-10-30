@@ -30,7 +30,7 @@ export default class SimpleScreenshotExtension extends Extension {
             SHORTCUT_KEY,
             this._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
-            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
+            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
             () => this.openOverlay()
         );
 
@@ -77,6 +77,8 @@ export default class SimpleScreenshotExtension extends Extension {
 
             this._overlay = new SnippingOverlay({
                 initialMode: mode ?? this._settings.get_string('default-mode'),
+                includePointer: this._settings.get_boolean('include-pointer'),
+                onPointerChanged: enabled => this._settings?.set_boolean('include-pointer', enabled),
                 onCapture: (prepared, rect, annotations, save) => this._capture(prepared, rect, annotations, save),
                 onCancel: () => {
                     this._overlay = null;

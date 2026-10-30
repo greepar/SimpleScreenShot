@@ -4,8 +4,13 @@ All notable changes to Simple ScreenShot are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- A persistent pointer toggle and frozen pointer preview in the capture toolbar.
+
 ### Fixed
 
+- Allow the capture shortcut while shell menus, including the Zorin start menu, are open. Freeze menus before releasing their input grabs.
 - Keep the top selection shade anchored to the screen origin instead of appearing as a dark horizontal band across the selected area.
 
 ## [0.1.2] - 2026-08-29
